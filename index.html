@@ -398,19 +398,29 @@
         return;
       }
 
-      console.log("Iniciando generación de licencia...");
-      alert("⏳ Generando licencia, por favor espera...");
+      console.log("=== INICIANDO GENERACIÓN ===");
+      console.log("Licencia actual:", licenciaActual);
       
-      // Dar tiempo para que se muestre el alert
+      // Dar tiempo para que se muestre el mensaje
       setTimeout(function() {
-        generarImagenLicencia();
+        try {
+          generarImagenLicencia();
+        } catch (error) {
+          console.error("Error en generación:", error);
+          alert("❌ Error al generar: " + error.message);
+        }
       }, 100);
     }
 
     // FUNCIÓN PARA GENERAR LA IMAGEN
     function generarImagenLicencia() {
+      console.log("=== Función generarImagenLicencia ejecutada ===");
+      
       const canvas = document.getElementById('licenseCanvas');
       const ctx = canvas.getContext('2d');
+
+      console.log("Canvas obtenido:", canvas);
+      console.log("Contexto obtenido:", ctx);
 
       // Limpiar canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -436,6 +446,8 @@
       ctx.font = 'bold 48px Arial';
       ctx.fillText('Licencia de conducir - Argentina Roleplay', 130, 75);
 
+      console.log("Header dibujado");
+
       // === SECCIÓN IZQUIERDA (Foto) ===
       ctx.fillStyle = '#c5dce8';
       ctx.fillRect(82, 180, 340, 480);
@@ -444,12 +456,15 @@
       ctx.fillStyle = '#7fa854';
       ctx.fillRect(82, 500, 340, 160);
 
+      console.log("Sección izquierda dibujada");
+      console.log("Intentando cargar foto:", licenciaActual.foto ? "Existe" : "No existe");
+
       // Cargar y dibujar la foto del usuario
       const userPhoto = new Image();
-      userPhoto.crossOrigin = "anonymous";
       
       userPhoto.onload = function() {
-        console.log("Foto cargada exitosamente");
+        console.log("✓ Foto cargada exitosamente");
+        console.log("Dimensiones foto:", userPhoto.width, "x", userPhoto.height);
         
         // Dibujar foto en el área designada
         ctx.save();
@@ -475,12 +490,15 @@
         ctx.drawImage(userPhoto, offsetX, offsetY, drawWidth, drawHeight);
         ctx.restore();
 
+        console.log("Foto dibujada en canvas");
+
         // Continuar con el resto de la licencia
         continuarDibujandoLicencia(ctx, azulOscuro, azulMedio, grisClaro);
       };
       
-      userPhoto.onerror = function() {
-        console.error("Error al cargar la foto");
+      userPhoto.onerror = function(e) {
+        console.error("❌ Error al cargar la foto:", e);
+        console.log("Dibujando placeholder...");
         
         // Si falla, dibujar placeholder
         ctx.fillStyle = '#a0c0d0';
@@ -492,14 +510,16 @@
         ctx.font = '24px Arial';
         ctx.fillText('Sin foto', 252, 360);
         
+        console.log("Placeholder dibujado, continuando...");
         continuarDibujandoLicencia(ctx, azulOscuro, azulMedio, grisClaro);
       };
       
+      console.log("Asignando src a la imagen...");
       userPhoto.src = licenciaActual.foto;
     }
 
     function continuarDibujandoLicencia(ctx, azulOscuro, azulMedio, grisClaro) {
-      console.log("Dibujando resto de la licencia...");
+      console.log("=== Dibujando resto de la licencia ===");
 
       // === SECCIÓN CENTRAL (Datos) ===
       ctx.fillStyle = grisClaro;
@@ -515,6 +535,8 @@
       ctx.rotate(-25 * Math.PI / 180);
       ctx.fillText('ArgeRP', 0, 0);
       ctx.restore();
+
+      console.log("Sección central y marca de agua dibujadas");
 
       // === DATOS DE LA LICENCIA ===
       ctx.textAlign = 'left';
@@ -567,6 +589,8 @@
       ctx.fillStyle = azulMedio;
       ctx.fillText(licenciaActual.fechaRenovacion, 520, yPos + 65);
 
+      console.log("Datos escritos");
+
       // === SECCIÓN DERECHA (Tipo de Licencia) ===
       ctx.textAlign = 'right';
       ctx.fillStyle = azulOscuro;
@@ -578,6 +602,8 @@
       ctx.font = 'bold 38px Arial';
       ctx.fillStyle = azulMedio;
       ctx.fillText(licenciaActual.tipoLicencia, 1380, 320);
+
+      console.log("Tipo de licencia escrito");
 
       // QR Code (placeholder)
       ctx.fillStyle = 'white';
@@ -601,6 +627,8 @@
       ctx.font = 'bold 16px Arial';
       ctx.fillText('Scan me!', 1330, 660);
 
+      console.log("QR Code dibujado");
+
       // === FOOTER (Azul oscuro) ===
       ctx.fillStyle = azulOscuro;
       ctx.fillRect(0, 700, canvas.width, 116);
@@ -621,27 +649,41 @@
       ctx.textAlign = 'left';
       ctx.fillText('Argentina Roleplay - Licencias', 190, 770);
 
+      console.log("Footer dibujado");
+      console.log("=== Licencia completada, iniciando descarga ===");
+
       // Descargar después de un breve delay
-      console.log("Licencia generada, iniciando descarga...");
       setTimeout(function() {
         descargarLicencia();
       }, 300);
     }
 
     function descargarLicencia() {
+      console.log("=== Función descargarLicencia ejecutada ===");
+      
       try {
         const canvas = document.getElementById('licenseCanvas');
+        console.log("Canvas para descarga:", canvas);
+        
+        const dataURL = canvas.toDataURL('image/png');
+        console.log("DataURL generado, longitud:", dataURL.length);
+        
         const link = document.createElement('a');
         const nombreArchivo = 'Licencia_' + licenciaActual.numero.replace(/[^a-zA-Z0-9]/g, '_') + '_' + licenciaActual.nombre.replace(/\s+/g, '_') + '.png';
+        
+        console.log("Nombre del archivo:", nombreArchivo);
+        
         link.download = nombreArchivo;
-        link.href = canvas.toDataURL('image/png');
+        link.href = dataURL;
+        
+        console.log("Link creado, iniciando click...");
         link.click();
         
-        console.log("Descarga completada");
-        alert("✅ ¡Licencia generada y descargada exitosamente!\n\nBusca el archivo: " + nombreArchivo);
+        console.log("✓ Descarga completada exitosamente");
+        alert("✅ ¡Licencia generada y descargada!\n\nArchivo: " + nombreArchivo + "\n\nBusca en tu carpeta de Descargas.");
       } catch (error) {
-        console.error("Error al descargar:", error);
-        alert("❌ Error al descargar la licencia. Por favor intenta nuevamente.");
+        console.error("❌ Error al descargar:", error);
+        alert("❌ Error al descargar la licencia:\n" + error.message + "\n\nRevisa la consola (F12) para más detalles.");
       }
     }
 
