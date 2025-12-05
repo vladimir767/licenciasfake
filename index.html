@@ -88,7 +88,7 @@
         <p class="text-blue-100 text-base sm:text-lg mb-8">Sistema Oficial de Gestión de Licencias</p>
         <button onclick="mostrarSistema()"
                 class="bg-white text-blue-600 px-8 sm:px-12 py-4 rounded-xl font-bold text-lg sm:text-xl hover:bg-blue-50 shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
-          🚀 Acceder al Sistema
+          Acceder al Sistema
         </button>
       </div>
     </div>
@@ -101,12 +101,12 @@
         <div class="flex items-center justify-between flex-wrap gap-4">
           <div>
             <h1 class="text-2xl sm:text-4xl font-bold">
-              🎫 Sistema de Licencias
+              Sistema de Licencias
             </h1>
             <p class="text-blue-100 mt-2 text-sm sm:text-base">Argentina Roleplay • Centro de Gestión</p>
           </div>
           <button onclick="mostrarEstadisticas()" class="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl font-medium transition">
-            📊 Estadísticas
+            Estadísticas
           </button>
         </div>
       </div>
@@ -148,7 +148,7 @@
       <!-- FORMULARIO -->
       <div id="formulario" class="hidden glass-effect rounded-2xl shadow-2xl p-6 sm:p-8">
         <div class="max-w-3xl mx-auto">
-          <h2 class="text-3xl font-bold mb-8 text-white text-center">✨ Registrar Nueva Licencia</h2>
+          <h2 class="text-3xl font-bold mb-8 text-white text-center"> Registrar Nueva Licencia</h2>
 
           <div class="space-y-6">
             <div class="bg-white/90 rounded-xl p-4">
@@ -159,12 +159,11 @@
             <div class="bg-white/90 rounded-xl p-4">
               <label class="block text-sm font-bold text-gray-700 mb-2">🚗 Tipo de Licencia *</label>
               <select id="tipoLicencia" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base focus:ring-4 focus:ring-blue-300">
-                <option value="">Seleccione una opción</option>
-                <option value="Deportivos">🏎️ Deportivos</option>
-                <option value="Electricos">⚡ Eléctricos</option>
-                <option value="Clasicos">🚙 Clásicos</option>
-                <option value="Motocicletas">🏍️ Motocicletas</option>
-                <option value="Camiones">🚛 Camiones</option>
+                <option value="">Seleccione una Licencia</option>
+                <option value="Deportivos">Deportivos</option>
+                <option value="Electricos">Eléctricos</option>
+                <option value="Clasicos">Clásicos</option>
+                
               </select>
             </div>
 
@@ -199,7 +198,7 @@
 
           <div class="flex flex-col sm:flex-row gap-4 mt-8">
             <button onclick="registrarLicencia()" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
-              💾 Registrar Licencia
+              ✅ Registrar Licencia
             </button>
             <button onclick="cerrarFormulario()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-4 rounded-xl font-bold text-lg shadow-xl transition duration-300">
               ❌ Cancelar
@@ -241,18 +240,18 @@
       </div>
 
       <div class="mt-6 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border-2 border-green-300">
-        <h4 class="font-bold text-gray-800 mb-4 text-center text-lg">🎫 Generar Licencia Oficial</h4>
+        <h4 class="font-bold text-gray-800 mb-4 text-center text-lg">¿Queres generar la licencia?</h4>
         <button onclick="generarYDescargarLicencia()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
-          📸 Generar y Descargar
+          Descargar Licencia
         </button>
       </div>
 
       <div class="flex flex-col sm:flex-row gap-4 mt-6">
         <button onclick="confirmarEliminar()" class="flex-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transition duration-300">
-          🗑️ Eliminar
+          Eliminar Lic.
         </button>
         <button onclick="cerrarModal()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-4 rounded-xl font-bold text-lg shadow-xl transition duration-300">
-          ✖️ Cerrar
+          Cerrar
         </button>
       </div>
     </div>
@@ -397,7 +396,7 @@
 
     // ============ FORMULARIO ============
     function solicitarClave() {
-      const clave = prompt("🔐 Ingrese la clave de acceso:");
+      const clave = prompt("🔐 | Ingrese la clave de acceso:");
       
       if (clave === "LicenciasArgentina2025") {
         mostrarFormulario();
@@ -506,11 +505,9 @@
         card.onclick = () => abrirModal(lic);
 
         const tipoEmoji = {
-          'Deportivos': '🏎️',
-          'Electricos': '⚡',
-          'Clasicos': '🚙',
-          'Motocicletas': '🏍️',
-          'Camiones': '🚛'
+          'Deportivos': '',
+          'Electricos': '',
+          'Clasicos': '',
         };
 
         card.innerHTML = `
@@ -557,7 +554,7 @@
     }
 
     function confirmarEliminar() {
-      if (confirm("⚠️ ¿Eliminar esta licencia?\n\nEsta acción no se puede deshacer.")) {
+      if (confirm("⚠️ | ¿Eliminar esta licencia?\n\nEsta acción no se puede deshacer.")) {
         delete licencias[licenciaActual.numero];
         if (guardarLicencias()) {
           mostrarNotificacion('Licencia eliminada', 'success');
@@ -830,3 +827,4 @@
   </script>
 </body>
 </html>
+
