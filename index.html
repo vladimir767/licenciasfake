@@ -3,144 +3,206 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistema de Licencias</title>
-
-  <!-- Tailwind CSS -->
+  <title>Sistema de Licencias ArgentinaRP</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
-    .modal-bg { background: rgba(0, 0, 0, 0.5); }
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    .animated-gradient {
+      background: linear-gradient(-45deg, #1e3a8a, #3b82f6, #06b6d4, #0891b2);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    
     * {
       -webkit-tap-highlight-color: transparent;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .shimmer {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
     }
   </style>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 p-2 sm:p-4">
+<body class="min-h-screen animated-gradient p-2 sm:p-4">
 
   <div class="max-w-7xl mx-auto">
     <!-- PANTALLA DE BIENVENIDA -->
-    <div id="pantallaInicio" class="bg-white rounded-lg shadow-2xl overflow-hidden">
-      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-8 sm:p-12 text-white text-center">
-        <h1 class="text-2xl sm:text-4xl font-bold mb-4">
-          Bienvenido al Centro de Licencias de Argentina Roleplay
+    <div id="pantallaInicio" class="glass-effect rounded-2xl shadow-2xl overflow-hidden">
+      <div class="p-8 sm:p-16 text-white text-center">
+        <div class="mb-8">
+          <div class="w-24 h-24 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+          </div>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-bold mb-4">
+          Centro de Licencias
         </h1>
-        <p class="text-blue-100 text-base sm:text-lg mb-6 sm:mb-8">Sistema Oficial de Gestión de Licencias</p>
+        <p class="text-xl sm:text-2xl font-light mb-2">Argentina Roleplay</p>
+        <p class="text-blue-100 text-base sm:text-lg mb-8">Sistema Oficial de Gestión de Licencias</p>
         <button onclick="mostrarSistema()"
-                class="bg-white text-blue-600 px-6 sm:px-8 py-3 rounded-lg font-bold text-base sm:text-lg hover:bg-blue-50 active:bg-blue-100 transition">
-          Entrar // Ingresar
+                class="bg-white text-blue-600 px-8 sm:px-12 py-4 rounded-xl font-bold text-lg sm:text-xl hover:bg-blue-50 shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
+          🚀 Acceder al Sistema
         </button>
       </div>
     </div>
 
     <!-- SISTEMA COMPLETO -->
-    <div id="sistemaCompleto" class="bg-white rounded-lg shadow-2xl overflow-hidden hidden">
-
+    <div id="sistemaCompleto" class="hidden space-y-6">
+      
       <!-- HEADER -->
-      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 sm:p-6 text-white">
-        <h1 class="text-xl sm:text-3xl font-bold">
-          Sistema de Licencias de Conducir - Roleplay ArgeRP
-        </h1>
-        <p class="text-blue-100 mt-2 text-sm sm:text-base">Centro de Licencias // ArgentinaRP</p>
+      <div class="glass-effect rounded-2xl shadow-2xl p-6 sm:p-8 text-white">
+        <div class="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h1 class="text-2xl sm:text-4xl font-bold">
+              🎫 Sistema de Licencias
+            </h1>
+            <p class="text-blue-100 mt-2 text-sm sm:text-base">Argentina Roleplay • Centro de Gestión</p>
+          </div>
+          <button onclick="mostrarEstadisticas()" class="bg-white/20 hover:bg-white/30 px-6 py-3 rounded-xl font-medium transition">
+            📊 Estadísticas
+          </button>
+        </div>
       </div>
 
-      <!-- LICENCIAS REGISTRADAS -->
-      <div class="p-4 sm:p-6 bg-gray-50 border-b">
-        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-gray-800">Licencias Registradas</h2>
-        <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
-          <input id="searchInput"
-                 type="text"
-                 placeholder="Buscar por nombre o número..."
-                 class="flex-1 w-full sm:max-w-md pl-4 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-base" />
+      <!-- BÚSQUEDA Y ACCIONES -->
+      <div class="glass-effect rounded-2xl shadow-2xl p-6">
+        <div class="flex flex-col sm:flex-row gap-4">
+          <div class="flex-1 relative">
+            <input id="searchInput"
+                   type="text"
+                   placeholder="🔍 Buscar por nombre o número..."
+                   class="w-full pl-12 pr-4 py-4 bg-white/90 border-2 border-white/30 rounded-xl focus:ring-4 focus:ring-blue-300 text-base font-medium" />
+            <svg class="w-6 h-6 absolute left-4 top-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <button onclick="solicitarClave()"
+                  class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-4 rounded-xl font-bold text-base shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
+            ➕ Registrar Licencia
+          </button>
         </div>
+      </div>
+
+      <!-- CONTADOR -->
+      <div id="contador" class="glass-effect rounded-2xl shadow-2xl p-6 text-white text-center">
+        <p class="text-lg font-medium">Licencias Registradas</p>
+        <p class="text-5xl font-bold mt-2">0</p>
       </div>
 
       <!-- LISTA DE LICENCIAS -->
-      <div class="p-4 sm:p-6 border-b">
-        <div id="listaLicencias" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+      <div class="glass-effect rounded-2xl shadow-2xl p-6">
+        <h2 class="text-2xl font-bold mb-6 text-white flex items-center gap-3">
+          <span>📋</span> Registro de Licencias
+        </h2>
+        <div id="listaLicencias" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         </div>
       </div>
 
-      <!-- REGISTRAR LICENCIAS -->
-      <div class="p-4 sm:p-6 bg-gray-50">
-        <h2 class="text-xl sm:text-2xl font-bold mb-4 text-gray-800">Registrar Licencias</h2>
-        <button type="button" onclick="solicitarClave(); return false;"
-                class="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-6 py-3 rounded-lg font-medium text-base w-full sm:w-auto transition cursor-pointer">
-          Registrar Licencia
-        </button>
-      </div>
-
       <!-- FORMULARIO -->
-      <div id="formulario" class="hidden p-4 sm:p-6 bg-blue-50 border-b">
-        <div class="max-w-2xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow">
-          <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800">Registrar Nueva Licencia</h2>
+      <div id="formulario" class="hidden glass-effect rounded-2xl shadow-2xl p-6 sm:p-8">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="text-3xl font-bold mb-8 text-white text-center">✨ Registrar Nueva Licencia</h2>
 
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Nombre y Apellido (civil) *</label>
-              <input id="nombre"
-                     type="text"
-                     class="w-full px-4 py-3 border rounded-lg text-base"
-                     placeholder="Ej: Juan Pérez" />
+          <div class="space-y-6">
+            <div class="bg-white/90 rounded-xl p-4">
+              <label class="block text-sm font-bold text-gray-700 mb-2">👤 Nombre y Apellido *</label>
+              <input id="nombre" type="text" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base focus:ring-4 focus:ring-blue-300" placeholder="Ej: Juan Pérez" />
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Licencia *</label>
-              <select id="tipoLicencia"
-                      class="w-full px-4 py-3 border rounded-lg text-base">
+            <div class="bg-white/90 rounded-xl p-4">
+              <label class="block text-sm font-bold text-gray-700 mb-2">🚗 Tipo de Licencia *</label>
+              <select id="tipoLicencia" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base focus:ring-4 focus:ring-blue-300">
                 <option value="">Seleccione una opción</option>
-                <option value="Deportivos">Deportivos</option>
-                <option value="Electricos">Eléctricos</option>
-                <option value="Clasicos">Clásicos</option>
+                <option value="Deportivos">🏎️ Deportivos</option>
+                <option value="Electricos">⚡ Eléctricos</option>
+                <option value="Clasicos">🚙 Clásicos</option>
+                <option value="Motocicletas">🏍️ Motocicletas</option>
+                <option value="Camiones">🚛 Camiones</option>
               </select>
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">N° De Registro *</label>
-              <input id="numero"
-                     type="text"
-                     class="w-full px-4 py-3 border rounded-lg text-base"
-                     placeholder="Ej: DL-2024-001234" />
+            <div class="bg-white/90 rounded-xl p-4">
+              <label class="block text-sm font-bold text-gray-700 mb-2">🔢 N° De Registro *</label>
+              <input id="numero" type="text" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base focus:ring-4 focus:ring-blue-300" placeholder="Ej: DL-2024-001234" />
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de Registro *</label>
-              <input id="fechaRegistro"
-                     type="date"
-                     class="w-full px-4 py-3 border rounded-lg text-base" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="bg-white/90 rounded-xl p-4">
+                <label class="block text-sm font-bold text-gray-700 mb-2">📅 Fecha de Registro *</label>
+                <input id="fechaRegistro" type="date" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base focus:ring-4 focus:ring-blue-300" />
+              </div>
+
+              <div class="bg-white/90 rounded-xl p-4">
+                <label class="block text-sm font-bold text-gray-700 mb-2">🔄 Fecha de Renovación *</label>
+                <input id="fechaRenovacion" type="date" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base focus:ring-4 focus:ring-blue-300" />
+              </div>
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Fecha de Renovación *</label>
-              <input id="fechaRenovacion"
-                     type="date"
-                     class="w-full px-4 py-3 border rounded-lg text-base" />
+            <div class="bg-white/90 rounded-xl p-4">
+              <label class="block text-sm font-bold text-gray-700 mb-2">✍️ Firma Responsable *</label>
+              <input id="firma" type="text" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base focus:ring-4 focus:ring-blue-300" placeholder="Ej: Dr. Carlos Rodríguez" />
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Firma Responsable *</label>
-              <input id="firma"
-                     type="text"
-                     class="w-full px-4 py-3 border rounded-lg text-base"
-                     placeholder="Ej: Dr. Carlos Rodríguez" />
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Foto Perfil (civil) *</label>
-              <input type="file" accept="image/*" id="fotoInput"
-                     class="w-full px-4 py-3 border rounded-lg text-base" />
-              <img id="fotoPreview" class="mt-3 w-32 h-32 object-cover rounded-lg hidden border-2 border-gray-200" />
+            <div class="bg-white/90 rounded-xl p-4">
+              <label class="block text-sm font-bold text-gray-700 mb-2">📸 Foto de Perfil *</label>
+              <input type="file" accept="image/*" id="fotoInput" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-base" />
+              <img id="fotoPreview" class="mt-4 w-40 h-40 object-cover rounded-xl hidden border-4 border-blue-500 mx-auto shadow-xl" />
             </div>
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-3 mt-6">
-            <button onclick="registrarLicencia()"
-                    class="flex-1 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white py-3 rounded-lg font-medium text-base transition">
-              Registrar Licencia
+          <div class="flex flex-col sm:flex-row gap-4 mt-8">
+            <button onclick="registrarLicencia()" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
+              💾 Registrar Licencia
             </button>
-            <button onclick="cerrarFormulario()"
-                    class="flex-1 bg-gray-300 hover:bg-gray-400 active:bg-gray-500 py-3 rounded-lg font-medium text-base transition">
-              Cancelar
+            <button onclick="cerrarFormulario()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-4 rounded-xl font-bold text-lg shadow-xl transition duration-300">
+              ❌ Cancelar
             </button>
           </div>
         </div>
@@ -150,110 +212,204 @@
   </div>
 
   <!-- MODAL -->
-  <div id="modal" class="fixed inset-0 hidden modal-bg items-center justify-center p-4 z-50" onclick="cerrarModalClick(event)">
-    <div class="bg-white rounded-lg max-w-2xl w-full p-4 sm:p-6 shadow-2xl max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
-      <img id="modalFoto" class="w-32 h-32 sm:w-40 sm:h-40 mx-auto rounded-lg object-cover border-4 border-blue-500" />
-      <h3 id="modalNombre" class="text-xl sm:text-2xl font-bold mt-4 text-gray-800 text-center"></h3>
+  <div id="modal" class="fixed inset-0 hidden items-center justify-center p-4 z-50" style="background: rgba(0, 0, 0, 0.7);" onclick="cerrarModalClick(event)">
+    <div class="bg-gradient-to-br from-white to-gray-100 rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+      <img id="modalFoto" class="w-40 h-40 sm:w-48 sm:h-48 mx-auto rounded-2xl object-cover border-4 border-blue-500 shadow-2xl" />
+      <h3 id="modalNombre" class="text-2xl sm:text-3xl font-bold mt-6 text-gray-800 text-center"></h3>
 
-      <div class="mt-4 sm:mt-6 space-y-2 sm:space-y-3 bg-gray-50 p-3 sm:p-4 rounded-lg text-sm sm:text-base">
-        <div class="flex justify-between">
-          <span class="font-medium text-gray-600">Tipo:</span>
-          <span id="modalTipo" class="text-right"></span>
+      <div class="mt-6 space-y-3 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border-2 border-blue-200">
+        <div class="flex justify-between items-center py-2 border-b border-gray-300">
+          <span class="font-bold text-gray-700">🚗 Tipo:</span>
+          <span id="modalTipo" class="text-right font-medium text-blue-600"></span>
         </div>
-        <div class="flex justify-between">
-          <span class="font-medium text-gray-600">N° Registro:</span>
-          <span id="modalNumero" class="text-right"></span>
+        <div class="flex justify-between items-center py-2 border-b border-gray-300">
+          <span class="font-bold text-gray-700">🔢 N° Registro:</span>
+          <span id="modalNumero" class="text-right font-medium"></span>
         </div>
-        <div class="flex justify-between">
-          <span class="font-medium text-gray-600">Fecha Registro:</span>
-          <span id="modalFechaRegistro" class="text-right"></span>
+        <div class="flex justify-between items-center py-2 border-b border-gray-300">
+          <span class="font-bold text-gray-700">📅 Fecha Registro:</span>
+          <span id="modalFechaRegistro" class="text-right font-medium"></span>
         </div>
-        <div class="flex justify-between">
-          <span class="font-medium text-gray-600">Fecha Renovación:</span>
-          <span id="modalFechaRenovacion" class="text-right"></span>
+        <div class="flex justify-between items-center py-2 border-b border-gray-300">
+          <span class="font-bold text-gray-700">🔄 Fecha Renovación:</span>
+          <span id="modalFechaRenovacion" class="text-right font-medium"></span>
         </div>
-        <div class="flex justify-between">
-          <span class="font-medium text-gray-600">Firma:</span>
-          <span id="modalFirma" class="text-right"></span>
+        <div class="flex justify-between items-center py-2">
+          <span class="font-bold text-gray-700">✍️ Firma:</span>
+          <span id="modalFirma" class="text-right font-medium"></span>
         </div>
       </div>
 
-      <!-- BOTÓN PARA GENERAR IMAGEN DE LICENCIA -->
-      <div class="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border-2 border-green-200">
-        <h4 class="font-bold text-gray-800 mb-3 text-center">🎫 Generar Imagen de Licencia</h4>
-        <button onclick="iniciarGeneracionLicencia()"
-                class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 rounded-lg font-medium text-base transition shadow-lg">
-          📸 Generar y Descargar Licencia
+      <div class="mt-6 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border-2 border-green-300">
+        <h4 class="font-bold text-gray-800 mb-4 text-center text-lg">🎫 Generar Licencia Oficial</h4>
+        <button onclick="generarYDescargarLicencia()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300">
+          📸 Generar y Descargar
         </button>
       </div>
 
-      <div class="flex flex-col sm:flex-row gap-3 mt-4">
-        <button onclick="confirmarEliminar()"
-                class="flex-1 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white py-3 rounded-lg font-medium text-base transition">
-          Eliminar
+      <div class="flex flex-col sm:flex-row gap-4 mt-6">
+        <button onclick="confirmarEliminar()" class="flex-1 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transition duration-300">
+          🗑️ Eliminar
         </button>
-        <button onclick="cerrarModal()"
-                class="flex-1 bg-gray-300 hover:bg-gray-400 active:bg-gray-500 py-3 rounded-lg font-medium text-base transition">
-          Cerrar
+        <button onclick="cerrarModal()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-4 rounded-xl font-bold text-lg shadow-xl transition duration-300">
+          ✖️ Cerrar
         </button>
       </div>
     </div>
   </div>
 
-  <!-- CANVAS OCULTO PARA GENERAR IMAGEN -->
+  <!-- CANVAS OCULTO -->
   <canvas id="licenseCanvas" width="1456" height="816" style="display: none;"></canvas>
 
   <script>
-    let fotoBase64 = null;
-    let licenciaActual = null;
     let licencias = {};
+    let licenciaActual = null;
+    const STORAGE_KEY = 'licenciasArgRP_v2';
+    const MAX_IMAGE_SIZE = 400; // Reducir tamaño de imágenes
 
-    function cargarLicenciasDesdeStorage() {
+    // ============ NOTIFICACIONES ============
+    function mostrarNotificacion(mensaje, tipo = 'success') {
+      const colores = {
+        success: 'from-green-500 to-emerald-600',
+        error: 'from-red-500 to-red-600',
+        info: 'from-blue-500 to-indigo-600'
+      };
+      
+      const iconos = {
+        success: '✅',
+        error: '❌',
+        info: 'ℹ️'
+      };
+
+      const notif = document.createElement('div');
+      notif.className = `notification bg-gradient-to-r ${colores[tipo]} text-white px-6 py-4 rounded-xl shadow-2xl font-bold`;
+      notif.innerHTML = `${iconos[tipo]} ${mensaje}`;
+      document.body.appendChild(notif);
+
+      setTimeout(() => {
+        notif.style.animation = 'slideIn 0.3s ease reverse';
+        setTimeout(() => notif.remove(), 300);
+      }, 3000);
+    }
+
+    // ============ COMPRESIÓN DE IMÁGENES ============
+    function comprimirImagen(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+
+            // Redimensionar manteniendo aspecto
+            if (width > height) {
+              if (width > MAX_IMAGE_SIZE) {
+                height *= MAX_IMAGE_SIZE / width;
+                width = MAX_IMAGE_SIZE;
+              }
+            } else {
+              if (height > MAX_IMAGE_SIZE) {
+                width *= MAX_IMAGE_SIZE / height;
+                height = MAX_IMAGE_SIZE;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Comprimir a JPEG 0.7 calidad
+            const compressed = canvas.toDataURL('image/jpeg', 0.7);
+            resolve(compressed);
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // ============ STORAGE ============
+    function cargarLicencias() {
       try {
-        const datosGuardados = localStorage.getItem('licenciasArgentinaRP');
-        if (datosGuardados) {
-          licencias = JSON.parse(datosGuardados);
-          console.log("Licencias cargadas:", Object.keys(licencias).length);
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (data) {
+          licencias = JSON.parse(data);
+          console.log('✓ Licencias cargadas:', Object.keys(licencias).length);
         }
       } catch (error) {
-        console.error("Error al cargar licencias:", error);
+        console.error('Error al cargar:', error);
         licencias = {};
       }
+      actualizarContador();
+      renderizarLicencias();
     }
 
-    function guardarLicenciasEnStorage() {
+    function guardarLicencias() {
       try {
-        localStorage.setItem('licenciasArgentinaRP', JSON.stringify(licencias));
-        console.log("Licencias guardadas:", Object.keys(licencias).length);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(licencias));
+        console.log('✓ Guardado exitoso');
+        return true;
       } catch (error) {
-        console.error("Error al guardar licencias:", error);
-        alert("Error al guardar. El archivo puede ser muy grande.");
+        console.error('Error al guardar:', error);
+        if (error.name === 'QuotaExceededError') {
+          mostrarNotificacion('Almacenamiento lleno. Elimina licencias antiguas.', 'error');
+        }
+        return false;
       }
     }
 
+    // ============ UI PRINCIPAL ============
     function mostrarSistema() {
       document.getElementById("pantallaInicio").classList.add("hidden");
       document.getElementById("sistemaCompleto").classList.remove("hidden");
       cargarLicencias();
+      mostrarNotificacion('Bienvenido al sistema', 'info');
     }
 
+    function actualizarContador() {
+      const total = Object.keys(licencias).length;
+      document.getElementById("contador").querySelector("p:last-child").textContent = total;
+    }
+
+    function mostrarEstadisticas() {
+      const total = Object.keys(licencias).length;
+      const tipos = {};
+      
+      Object.values(licencias).forEach(lic => {
+        tipos[lic.tipoLicencia] = (tipos[lic.tipoLicencia] || 0) + 1;
+      });
+
+      let mensaje = `📊 ESTADÍSTICAS DEL SISTEMA\n\n`;
+      mensaje += `Total de licencias: ${total}\n\n`;
+      mensaje += `Por tipo:\n`;
+      
+      for (const [tipo, cantidad] of Object.entries(tipos)) {
+        mensaje += `• ${tipo}: ${cantidad}\n`;
+      }
+
+      alert(mensaje);
+    }
+
+    // ============ FORMULARIO ============
     function solicitarClave() {
-      const clave = prompt("Ingrese la clave de acceso para registrar una licencia:");
+      const clave = prompt("🔐 Ingrese la clave de acceso:");
       
       if (clave === "LicenciasArgentina2025") {
         mostrarFormulario();
       } else if (clave !== null) {
-        alert("Clave incorrecta, vuelva a intentarlo");
+        mostrarNotificacion('Clave incorrecta', 'error');
       }
     }
 
     function mostrarFormulario() {
       document.getElementById("formulario").classList.remove("hidden");
-      setTimeout(function() {
-        window.scrollTo({
-          top: document.getElementById("formulario").offsetTop - 20,
-          behavior: 'smooth'
-        });
+      setTimeout(() => {
+        document.getElementById("formulario").scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
     }
 
@@ -271,21 +427,22 @@
       document.getElementById("firma").value = "";
       document.getElementById("fotoInput").value = "";
       document.getElementById("fotoPreview").classList.add("hidden");
-      fotoBase64 = null;
     }
 
-    document.getElementById("fotoInput").addEventListener("change", function (e) {
+    document.getElementById("fotoInput").addEventListener("change", async function(e) {
       const file = e.target.files[0];
       if (!file) return;
 
-      const reader = new FileReader();
-      reader.onloadend = function() {
-        fotoBase64 = reader.result;
+      try {
+        mostrarNotificacion('Comprimiendo imagen...', 'info');
+        const compressed = await comprimirImagen(file);
         const preview = document.getElementById("fotoPreview");
-        preview.src = fotoBase64;
+        preview.src = compressed;
         preview.classList.remove("hidden");
-      };
-      reader.readAsDataURL(file);
+        mostrarNotificacion('Imagen cargada correctamente', 'success');
+      } catch (error) {
+        mostrarNotificacion('Error al procesar imagen', 'error');
+      }
     });
 
     function registrarLicencia() {
@@ -295,66 +452,84 @@
       const fechaRegistro = document.getElementById("fechaRegistro").value;
       const fechaRenovacion = document.getElementById("fechaRenovacion").value;
       const firma = document.getElementById("firma").value.trim();
+      const fotoSrc = document.getElementById("fotoPreview").src;
 
-      if (!nombre || !tipoLicencia || !numero || !fechaRegistro || !fechaRenovacion || !firma || !fotoBase64) {
-        alert("Por favor, completa todos los campos obligatorios incluyendo la foto");
+      if (!nombre || !tipoLicencia || !numero || !fechaRegistro || !fechaRenovacion || !firma || !fotoSrc || fotoSrc.includes('data:image/svg')) {
+        mostrarNotificacion('Completa todos los campos incluyendo la foto', 'error');
         return;
       }
 
       if (licencias[numero]) {
-        alert("Ya existe una licencia con este número de registro");
+        mostrarNotificacion('Ya existe una licencia con ese número', 'error');
         return;
       }
 
       const licencia = {
         id: Date.now(),
-        nombre: nombre,
-        tipoLicencia: tipoLicencia,
-        numero: numero,
-        fechaRegistro: fechaRegistro,
-        fechaRenovacion: fechaRenovacion,
-        firma: firma,
-        foto: fotoBase64
+        nombre,
+        tipoLicencia,
+        numero,
+        fechaRegistro,
+        fechaRenovacion,
+        firma,
+        foto: fotoSrc
       };
 
       licencias[numero] = licencia;
-      guardarLicenciasEnStorage();
-      alert("✓ Licencia registrada exitosamente");
       
-      cerrarFormulario();
-      cargarLicencias();
+      if (guardarLicencias()) {
+        mostrarNotificacion('Licencia registrada exitosamente', 'success');
+        cerrarFormulario();
+        actualizarContador();
+        renderizarLicencias();
+      }
     }
 
-    function cargarLicencias() {
+    // ============ RENDERIZADO ============
+    function renderizarLicencias() {
       const lista = document.getElementById("listaLicencias");
       lista.innerHTML = "";
 
       const licenciasArray = Object.values(licencias);
 
       if (licenciasArray.length === 0) {
-        lista.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8 text-base">No hay licencias registradas</p>';
+        lista.innerHTML = '<div class="col-span-full text-center py-12"><p class="text-white text-xl font-medium">📭 No hay licencias registradas</p><p class="text-blue-200 mt-2">Registra la primera licencia para comenzar</p></div>';
         return;
       }
 
-      licenciasArray.forEach(function(lic) {
-        const card = document.createElement("div");
-        card.className = "bg-gradient-to-br from-blue-50 to-indigo-50 border border-gray-200 rounded-lg p-4 cursor-pointer hover:shadow-lg active:shadow-xl transition transform hover:-translate-y-1";
-        card.onclick = function() { abrirModal(lic); };
+      // Ordenar por fecha (más recientes primero)
+      licenciasArray.sort((a, b) => b.id - a.id);
 
-        card.innerHTML = '<div class="flex gap-3 sm:gap-4">' +
-          '<img src="' + lic.foto + '" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg bg-gray-300 flex-shrink-0" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3C/svg%3E\'" />' +
-          '<div class="flex-1 min-w-0">' +
-            '<h3 class="font-bold text-base sm:text-lg truncate">' + lic.nombre + '</h3>' +
-            '<p class="text-sm text-blue-600 font-medium">' + lic.tipoLicencia + '</p>' +
-            '<p class="text-xs sm:text-sm text-gray-700 truncate">N°: ' + lic.numero + '</p>' +
-            '<p class="text-xs sm:text-sm text-gray-600">Reg: ' + lic.fechaRegistro + '</p>' +
-          '</div>' +
-        '</div>';
+      licenciasArray.forEach(lic => {
+        const card = document.createElement("div");
+        card.className = "bg-gradient-to-br from-white to-gray-50 rounded-xl p-5 cursor-pointer shadow-xl card-hover border-2 border-white/50";
+        card.onclick = () => abrirModal(lic);
+
+        const tipoEmoji = {
+          'Deportivos': '🏎️',
+          'Electricos': '⚡',
+          'Clasicos': '🚙',
+          'Motocicletas': '🏍️',
+          'Camiones': '🚛'
+        };
+
+        card.innerHTML = `
+          <div class="flex gap-4">
+            <img src="${lic.foto}" class="w-20 h-20 object-cover rounded-xl bg-gray-300 flex-shrink-0 border-2 border-blue-400 shadow-lg" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2240%22%3E👤%3C/text%3E%3C/svg%3E'" />
+            <div class="flex-1 min-w-0">
+              <h3 class="font-bold text-lg truncate text-gray-800">${lic.nombre}</h3>
+              <p class="text-base text-blue-600 font-bold">${tipoEmoji[lic.tipoLicencia] || '🚗'} ${lic.tipoLicencia}</p>
+              <p class="text-sm text-gray-600 truncate">N°: ${lic.numero}</p>
+              <p class="text-xs text-gray-500 mt-1">📅 ${lic.fechaRegistro}</p>
+            </div>
+          </div>
+        `;
 
         lista.appendChild(card);
       });
     }
 
+    // ============ MODAL ============
     function abrirModal(lic) {
       licenciaActual = lic;
       document.getElementById("modalFoto").src = lic.foto;
@@ -382,334 +557,275 @@
     }
 
     function confirmarEliminar() {
-      if (confirm("¿Está seguro que desea eliminar esta licencia?\n\nEsta acción no se puede deshacer.")) {
+      if (confirm("⚠️ ¿Eliminar esta licencia?\n\nEsta acción no se puede deshacer.")) {
         delete licencias[licenciaActual.numero];
-        guardarLicenciasEnStorage();
-        alert("✓ Licencia eliminada correctamente");
-        cerrarModal();
-        cargarLicencias();
+        if (guardarLicencias()) {
+          mostrarNotificacion('Licencia eliminada', 'success');
+          cerrarModal();
+          actualizarContador();
+          renderizarLicencias();
+        }
       }
     }
 
-    // FUNCIÓN PRINCIPAL PARA INICIAR LA GENERACIÓN
-    function iniciarGeneracionLicencia() {
+    // ============ GENERACIÓN DE LICENCIA ============
+    function generarYDescargarLicencia() {
       if (!licenciaActual) {
-        alert("❌ Error: No hay licencia seleccionada");
+        mostrarNotificacion('Error: No hay licencia seleccionada', 'error');
         return;
       }
 
-      console.log("=== INICIANDO GENERACIÓN ===");
-      console.log("Licencia actual:", licenciaActual);
-      
-      // Dar tiempo para que se muestre el mensaje
-      setTimeout(function() {
+      mostrarNotificacion('Generando licencia...', 'info');
+
+      setTimeout(() => {
         try {
-          generarImagenLicencia();
+          const canvas = document.getElementById('licenseCanvas');
+          const ctx = canvas.getContext('2d');
+
+          // Limpiar canvas
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Fondo principal
+          const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+          gradient.addColorStop(0, '#1e3a8a');
+          gradient.addColorStop(0.5, '#3b82f6');
+          gradient.addColorStop(1, '#06b6d4');
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Header superior
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+          ctx.fillRect(0, 0, canvas.width, 120);
+
+          // Logo LC
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+          ctx.beginPath();
+          ctx.arc(100, 60, 40, 0, 2 * Math.PI);
+          ctx.fill();
+          ctx.fillStyle = '#1e3a8a';
+          ctx.font = 'bold 32px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText('LC', 100, 72);
+
+          // Título
+          ctx.fillStyle = 'white';
+          ctx.font = 'bold 52px Arial';
+          ctx.textAlign = 'left';
+          ctx.fillText('LICENCIA DE CONDUCIR', 170, 75);
+
+          // Contenedor principal (card blanco)
+          ctx.fillStyle = 'white';
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+          ctx.shadowBlur = 30;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 10;
+          ctx.fillRect(60, 160, 1336, 520);
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
+
+          // Cargar y dibujar foto
+          const userPhoto = new Image();
+          userPhoto.crossOrigin = "anonymous";
+          
+          userPhoto.onload = function() {
+            // Área de foto
+            ctx.save();
+            ctx.beginPath();
+            ctx.roundRect(100, 200, 300, 380, 15);
+            ctx.clip();
+            
+            const aspectRatio = userPhoto.width / userPhoto.height;
+            let drawWidth, drawHeight, offsetX, offsetY;
+            
+            if (aspectRatio > 300/380) {
+              drawHeight = 380;
+              drawWidth = drawHeight * aspectRatio;
+              offsetX = 100 - (drawWidth - 300) / 2;
+              offsetY = 200;
+            } else {
+              drawWidth = 300;
+              drawHeight = drawWidth / aspectRatio;
+              offsetX = 100;
+              offsetY = 200 - (drawHeight - 380) / 2;
+            }
+            
+            ctx.drawImage(userPhoto, offsetX, offsetY, drawWidth, drawHeight);
+            ctx.restore();
+
+            // Borde de foto
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.roundRect(100, 200, 300, 380, 15);
+            ctx.stroke();
+
+            // Marca de agua
+            ctx.save();
+            ctx.globalAlpha = 0.05;
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = 'bold 120px Arial';
+            ctx.textAlign = 'center';
+            ctx.translate(728, 420);
+            ctx.rotate(-25 * Math.PI / 180);
+            ctx.fillText('ArgentinaRP', 0, 0);
+            ctx.restore();
+
+            // DATOS DE LA LICENCIA
+            let yPos = 250;
+            const leftMargin = 450;
+
+            // Nombre
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = 'bold 28px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('NOMBRE / NAME', leftMargin, yPos);
+            ctx.fillStyle = '#666';
+            ctx.font = '20px Arial';
+            ctx.fillText('[Nombre del titular]', leftMargin, yPos + 25);
+            ctx.fillStyle = '#3b82f6';
+            ctx.font = 'bold 36px Arial';
+            ctx.fillText(licenciaActual.nombre, leftMargin, yPos + 65);
+
+            // N° Licencia
+            yPos += 110;
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = 'bold 28px Arial';
+            ctx.fillText('N° LICENCIA / LICENSE N°', leftMargin, yPos);
+            ctx.fillStyle = '#666';
+            ctx.font = '20px Arial';
+            ctx.fillText('[Número de registro]', leftMargin, yPos + 25);
+            ctx.fillStyle = '#3b82f6';
+            ctx.font = 'bold 36px Arial';
+            ctx.fillText(licenciaActual.numero, leftMargin, yPos + 65);
+
+            // Tipo
+            yPos += 110;
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = 'bold 28px Arial';
+            ctx.fillText('TIPO / TYPE', leftMargin, yPos);
+            ctx.fillStyle = '#666';
+            ctx.font = '20px Arial';
+            ctx.fillText('[Categoría de vehículo]', leftMargin, yPos + 25);
+            ctx.fillStyle = '#10b981';
+            ctx.font = 'bold 36px Arial';
+            ctx.fillText(licenciaActual.tipoLicencia, leftMargin, yPos + 65);
+
+            // Fechas
+            yPos += 110;
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = 'bold 24px Arial';
+            ctx.fillText('REGISTRO: ' + licenciaActual.fechaRegistro, leftMargin, yPos);
+            ctx.fillText('RENOVACIÓN: ' + licenciaActual.fechaRenovacion, leftMargin, yPos + 35);
+
+            // QR Code (simplificado)
+            const qrSize = 150;
+            const qrX = 1180;
+            const qrY = 200;
+            
+            ctx.fillStyle = 'white';
+            ctx.fillRect(qrX, qrY, qrSize, qrSize);
+            ctx.strokeStyle = '#1e3a8a';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(qrX, qrY, qrSize, qrSize);
+            
+            ctx.fillStyle = '#1e3a8a';
+            for (let i = 0; i < 6; i++) {
+              for (let j = 0; j < 6; j++) {
+                if ((i + j) % 2 === 0) {
+                  ctx.fillRect(qrX + 10 + i * 22, qrY + 10 + j * 22, 18, 18);
+                }
+              }
+            }
+            
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('SCAN ME', qrX + qrSize/2, qrY + qrSize + 25);
+
+            // Footer
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.fillRect(0, 710, canvas.width, 106);
+
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 40px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('🇦🇷 ARGENTINA ROLEPLAY • SISTEMA OFICIAL DE LICENCIAS', 728, 770);
+
+            // Firma
+            ctx.font = '24px Arial';
+            ctx.fillText('Firma: ' + licenciaActual.firma, 728, 800);
+
+            // Descargar después de renderizar
+            setTimeout(() => descargarImagen(), 200);
+          };
+
+          userPhoto.onerror = function() {
+            console.error('Error al cargar foto');
+            mostrarNotificacion('Error al cargar la foto', 'error');
+          };
+
+          userPhoto.src = licenciaActual.foto;
+
         } catch (error) {
-          console.error("Error en generación:", error);
-          alert("❌ Error al generar: " + error.message);
+          console.error('Error:', error);
+          mostrarNotificacion('Error al generar: ' + error.message, 'error');
         }
       }, 100);
     }
 
-    // FUNCIÓN PARA GENERAR LA IMAGEN
-    function generarImagenLicencia() {
-      console.log("=== Función generarImagenLicencia ejecutada ===");
-      
-      const canvas = document.getElementById('licenseCanvas');
-      const ctx = canvas.getContext('2d');
-
-      console.log("Canvas obtenido:", canvas);
-      console.log("Contexto obtenido:", ctx);
-
-      // Limpiar canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Colores según la plantilla
-      const azulOscuro = '#0d2847';
-      const azulMedio = '#1e4976';
-      const grisClaro = '#e8e8e8';
-
-      // === HEADER SUPERIOR (Azul oscuro) ===
-      ctx.fillStyle = azulOscuro;
-      ctx.fillRect(0, 0, canvas.width, 112);
-
-      // Logo "LC" (placeholder)
-      ctx.fillStyle = '#666';
-      ctx.fillRect(50, 25, 60, 60);
-      ctx.fillStyle = 'white';
-      ctx.font = 'bold 36px Arial';
-      ctx.fillText('LC', 58, 68);
-
-      // Título principal
-      ctx.fillStyle = 'white';
-      ctx.font = 'bold 48px Arial';
-      ctx.fillText('Licencia de conducir - Argentina Roleplay', 130, 75);
-
-      console.log("Header dibujado");
-
-      // === SECCIÓN IZQUIERDA (Foto) ===
-      ctx.fillStyle = '#c5dce8';
-      ctx.fillRect(82, 180, 340, 480);
-
-      // Fondo verde debajo de la foto
-      ctx.fillStyle = '#7fa854';
-      ctx.fillRect(82, 500, 340, 160);
-
-      console.log("Sección izquierda dibujada");
-      console.log("Intentando cargar foto:", licenciaActual.foto ? "Existe" : "No existe");
-
-      // Cargar y dibujar la foto del usuario
-      const userPhoto = new Image();
-      
-      userPhoto.onload = function() {
-        console.log("✓ Foto cargada exitosamente");
-        console.log("Dimensiones foto:", userPhoto.width, "x", userPhoto.height);
-        
-        // Dibujar foto en el área designada
-        ctx.save();
-        ctx.beginPath();
-        ctx.rect(82, 180, 340, 320);
-        ctx.clip();
-        
-        const aspectRatio = userPhoto.width / userPhoto.height;
-        let drawWidth, drawHeight, offsetX, offsetY;
-        
-        if (aspectRatio > 340/320) {
-          drawHeight = 320;
-          drawWidth = drawHeight * aspectRatio;
-          offsetX = 82 - (drawWidth - 340) / 2;
-          offsetY = 180;
-        } else {
-          drawWidth = 340;
-          drawHeight = drawWidth / aspectRatio;
-          offsetX = 82;
-          offsetY = 180 - (drawHeight - 320) / 2;
-        }
-        
-        ctx.drawImage(userPhoto, offsetX, offsetY, drawWidth, drawHeight);
-        ctx.restore();
-
-        console.log("Foto dibujada en canvas");
-
-        // Continuar con el resto de la licencia
-        continuarDibujandoLicencia(ctx, azulOscuro, azulMedio, grisClaro);
-      };
-      
-      userPhoto.onerror = function(e) {
-        console.error("❌ Error al cargar la foto:", e);
-        console.log("Dibujando placeholder...");
-        
-        // Si falla, dibujar placeholder
-        ctx.fillStyle = '#a0c0d0';
-        ctx.fillRect(82, 180, 340, 320);
-        ctx.fillStyle = '#7ba5b8';
-        ctx.font = '48px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('☁️', 252, 320);
-        ctx.font = '24px Arial';
-        ctx.fillText('Sin foto', 252, 360);
-        
-        console.log("Placeholder dibujado, continuando...");
-        continuarDibujandoLicencia(ctx, azulOscuro, azulMedio, grisClaro);
-      };
-      
-      console.log("Asignando src a la imagen...");
-      userPhoto.src = licenciaActual.foto;
-    }
-
-    function continuarDibujandoLicencia(ctx, azulOscuro, azulMedio, grisClaro) {
-      console.log("=== Dibujando resto de la licencia ===");
-
-      // === SECCIÓN CENTRAL (Datos) ===
-      ctx.fillStyle = grisClaro;
-      ctx.fillRect(472, 180, 620, 480);
-
-      // Marca de agua central
-      ctx.save();
-      ctx.globalAlpha = 0.08;
-      ctx.fillStyle = azulMedio;
-      ctx.font = 'bold 180px Arial';
-      ctx.textAlign = 'center';
-      ctx.translate(782, 420);
-      ctx.rotate(-25 * Math.PI / 180);
-      ctx.fillText('ArgeRP', 0, 0);
-      ctx.restore();
-
-      console.log("Sección central y marca de agua dibujadas");
-
-      // === DATOS DE LA LICENCIA ===
-      ctx.textAlign = 'left';
-      let yPos = 250;
-
-      // N° Licencia / N° License
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 26px Arial';
-      ctx.fillText('N° Licencia / N° License', 520, yPos);
-      ctx.font = '20px Arial';
-      ctx.fillStyle = '#555';
-      ctx.fillText('[N° Registro]', 520, yPos + 28);
-      ctx.font = 'bold 32px Arial';
-      ctx.fillStyle = azulMedio;
-      ctx.fillText(licenciaActual.numero, 520, yPos + 65);
-
-      // Nombre / Name
-      yPos += 110;
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 26px Arial';
-      ctx.fillText('Nombre / Name', 520, yPos);
-      ctx.font = '20px Arial';
-      ctx.fillStyle = '#555';
-      ctx.fillText('[Nombre]', 520, yPos + 28);
-      ctx.font = 'bold 32px Arial';
-      ctx.fillStyle = azulMedio;
-      ctx.fillText(licenciaActual.nombre, 520, yPos + 65);
-
-      // Fecha Registro / Registration date
-      yPos += 110;
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 26px Arial';
-      ctx.fillText('Fecha Registro / Registration date', 520, yPos);
-      ctx.font = '20px Arial';
-      ctx.fillStyle = '#555';
-      ctx.fillText('[Fecha Registro]', 520, yPos + 28);
-      ctx.font = 'bold 32px Arial';
-      ctx.fillStyle = azulMedio;
-      ctx.fillText(licenciaActual.fechaRegistro, 520, yPos + 65);
-
-      // Fecha Renovacion / Renewal Date
-      yPos += 110;
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 26px Arial';
-      ctx.fillText('Fecha Renovacion / Renewal Date', 520, yPos);
-      ctx.font = '20px Arial';
-      ctx.fillStyle = '#555';
-      ctx.fillText('[Fecha Renovación]', 520, yPos + 28);
-      ctx.font = 'bold 32px Arial';
-      ctx.fillStyle = azulMedio;
-      ctx.fillText(licenciaActual.fechaRenovacion, 520, yPos + 65);
-
-      console.log("Datos escritos");
-
-      // === SECCIÓN DERECHA (Tipo de Licencia) ===
-      ctx.textAlign = 'right';
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 28px Arial';
-      ctx.fillText('Modelo / Model', 1380, 240);
-      ctx.font = '22px Arial';
-      ctx.fillStyle = '#555';
-      ctx.fillText('[Tipo de Licencia]', 1380, 275);
-      ctx.font = 'bold 38px Arial';
-      ctx.fillStyle = azulMedio;
-      ctx.fillText(licenciaActual.tipoLicencia, 1380, 320);
-
-      console.log("Tipo de licencia escrito");
-
-      // QR Code (placeholder)
-      ctx.fillStyle = 'white';
-      ctx.fillRect(1260, 500, 140, 140);
-      ctx.strokeStyle = azulOscuro;
-      ctx.lineWidth = 3;
-      ctx.strokeRect(1260, 500, 140, 140);
-      
-      // Patrón QR simple
-      ctx.fillStyle = azulOscuro;
-      for (let i = 0; i < 5; i++) {
-        for (let j = 0; j < 5; j++) {
-          if ((i + j) % 2 === 0) {
-            ctx.fillRect(1270 + i * 24, 510 + j * 24, 20, 20);
-          }
-        }
-      }
-      
-      ctx.textAlign = 'center';
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 16px Arial';
-      ctx.fillText('Scan me!', 1330, 660);
-
-      console.log("QR Code dibujado");
-
-      // === FOOTER (Azul oscuro) ===
-      ctx.fillStyle = azulOscuro;
-      ctx.fillRect(0, 700, canvas.width, 116);
-
-      // Logo RP
-      ctx.beginPath();
-      ctx.arc(130, 758, 40, 0, 2 * Math.PI);
-      ctx.fillStyle = 'white';
-      ctx.fill();
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 32px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText('RP', 130, 770);
-
-      // Texto footer
-      ctx.fillStyle = 'white';
-      ctx.font = 'bold 42px Arial';
-      ctx.textAlign = 'left';
-      ctx.fillText('Argentina Roleplay - Licencias', 190, 770);
-
-      console.log("Footer dibujado");
-      console.log("=== Licencia completada, iniciando descarga ===");
-
-      // Descargar después de un breve delay
-      setTimeout(function() {
-        descargarLicencia();
-      }, 300);
-    }
-
-    function descargarLicencia() {
-      console.log("=== Función descargarLicencia ejecutada ===");
-      
+    function descargarImagen() {
       try {
         const canvas = document.getElementById('licenseCanvas');
-        console.log("Canvas para descarga:", canvas);
-        
-        const dataURL = canvas.toDataURL('image/png');
-        console.log("DataURL generado, longitud:", dataURL.length);
-        
+        const dataURL = canvas.toDataURL('image/png', 1.0);
         const link = document.createElement('a');
-        const nombreArchivo = 'Licencia_' + licenciaActual.numero.replace(/[^a-zA-Z0-9]/g, '_') + '_' + licenciaActual.nombre.replace(/\s+/g, '_') + '.png';
-        
-        console.log("Nombre del archivo:", nombreArchivo);
+        const nombreArchivo = `Licencia_${licenciaActual.numero.replace(/[^a-zA-Z0-9]/g, '_')}_${licenciaActual.nombre.replace(/\s+/g, '_')}.png`;
         
         link.download = nombreArchivo;
         link.href = dataURL;
-        
-        console.log("Link creado, iniciando click...");
         link.click();
         
-        console.log("✓ Descarga completada exitosamente");
-        alert("✅ ¡Licencia generada y descargada!\n\nArchivo: " + nombreArchivo + "\n\nBusca en tu carpeta de Descargas.");
+        mostrarNotificacion('¡Licencia descargada exitosamente!', 'success');
       } catch (error) {
-        console.error("❌ Error al descargar:", error);
-        alert("❌ Error al descargar la licencia:\n" + error.message + "\n\nRevisa la consola (F12) para más detalles.");
+        console.error('Error al descargar:', error);
+        mostrarNotificacion('Error al descargar: ' + error.message, 'error');
       }
     }
 
+    // ============ BÚSQUEDA ============
     document.getElementById("searchInput").addEventListener("input", function(e) {
       const busqueda = e.target.value.toLowerCase().trim();
       const cards = document.querySelectorAll("#listaLicencias > div");
       
-      cards.forEach(function(card) {
+      let visibles = 0;
+      cards.forEach(card => {
         const texto = card.textContent.toLowerCase();
         if (texto.includes(busqueda)) {
           card.style.display = "block";
+          visibles++;
         } else {
           card.style.display = "none";
         }
       });
+
+      if (visibles === 0 && busqueda) {
+        document.getElementById("listaLicencias").innerHTML = '<div class="col-span-full text-center py-12"><p class="text-white text-xl font-medium">🔍 No se encontraron resultados</p><p class="text-blue-200 mt-2">Intenta con otro término de búsqueda</p></div>';
+      } else if (visibles === 0 && !busqueda) {
+        renderizarLicencias();
+      }
     });
 
+    // ============ ATAJOS DE TECLADO ============
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         if (!document.getElementById('modal').classList.contains('hidden')) {
           cerrarModal();
+        } else if (!document.getElementById('formulario').classList.contains('hidden')) {
+          cerrarFormulario();
         }
       }
     });
 
-    cargarLicenciasDesdeStorage();
+    // ============ INICIALIZACIÓN ============
     cargarLicencias();
   </script>
 </body>
