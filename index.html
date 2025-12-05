@@ -181,7 +181,7 @@
       <!-- BOTÓN PARA GENERAR IMAGEN DE LICENCIA -->
       <div class="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border-2 border-green-200">
         <h4 class="font-bold text-gray-800 mb-3 text-center">🎫 Generar Imagen de Licencia</h4>
-        <button onclick="generarImagenLicencia()"
+        <button onclick="iniciarGeneracionLicencia()"
                 class="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 rounded-lg font-medium text-base transition shadow-lg">
           📸 Generar y Descargar Licencia
         </button>
@@ -249,7 +249,7 @@
 
     function mostrarFormulario() {
       document.getElementById("formulario").classList.remove("hidden");
-      setTimeout(() => {
+      setTimeout(function() {
         window.scrollTo({
           top: document.getElementById("formulario").offsetTop - 20,
           behavior: 'smooth'
@@ -391,202 +391,245 @@
       }
     }
 
-    function generarImagenLicencia() {
+    // FUNCIÓN PRINCIPAL PARA INICIAR LA GENERACIÓN
+    function iniciarGeneracionLicencia() {
       if (!licenciaActual) {
-        alert("Error: No hay licencia seleccionada");
+        alert("❌ Error: No hay licencia seleccionada");
         return;
       }
 
+      console.log("Iniciando generación de licencia...");
+      alert("⏳ Generando licencia, por favor espera...");
+      
+      // Dar tiempo para que se muestre el alert
+      setTimeout(function() {
+        generarImagenLicencia();
+      }, 100);
+    }
+
+    // FUNCIÓN PARA GENERAR LA IMAGEN
+    function generarImagenLicencia() {
       const canvas = document.getElementById('licenseCanvas');
       const ctx = canvas.getContext('2d');
 
+      // Limpiar canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // Colores según la plantilla
       const azulOscuro = '#0d2847';
-      const azulClaro = '#2a5298';
+      const azulMedio = '#1e4976';
+      const grisClaro = '#e8e8e8';
 
+      // === HEADER SUPERIOR (Azul oscuro) ===
       ctx.fillStyle = azulOscuro;
-      ctx.fillRect(0, 0, canvas.width, 140);
+      ctx.fillRect(0, 0, canvas.width, 112);
 
+      // Logo "LC" (placeholder)
+      ctx.fillStyle = '#666';
+      ctx.fillRect(50, 25, 60, 60);
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 36px Arial';
+      ctx.fillText('LC', 58, 68);
+
+      // Título principal
       ctx.fillStyle = 'white';
       ctx.font = 'bold 48px Arial';
-      ctx.fillText('🚗 LC', 50, 90);
-      
-      ctx.font = 'bold 52px Arial';
-      ctx.fillText('Licencia de conducir - Argentina Roleplay', 180, 90);
+      ctx.fillText('Licencia de conducir - Argentina Roleplay', 130, 75);
 
-      ctx.fillStyle = '#e8f4f8';
-      ctx.fillRect(50, 180, 420, 560);
+      // === SECCIÓN IZQUIERDA (Foto) ===
+      ctx.fillStyle = '#c5dce8';
+      ctx.fillRect(82, 180, 340, 480);
 
+      // Fondo verde debajo de la foto
+      ctx.fillStyle = '#7fa854';
+      ctx.fillRect(82, 500, 340, 160);
+
+      // Cargar y dibujar la foto del usuario
       const userPhoto = new Image();
       userPhoto.crossOrigin = "anonymous";
       
       userPhoto.onload = function() {
+        console.log("Foto cargada exitosamente");
+        
+        // Dibujar foto en el área designada
         ctx.save();
         ctx.beginPath();
-        ctx.rect(70, 200, 380, 520);
+        ctx.rect(82, 180, 340, 320);
         ctx.clip();
         
         const aspectRatio = userPhoto.width / userPhoto.height;
         let drawWidth, drawHeight, offsetX, offsetY;
         
-        if (aspectRatio > 380/520) {
-          drawHeight = 520;
+        if (aspectRatio > 340/320) {
+          drawHeight = 320;
           drawWidth = drawHeight * aspectRatio;
-          offsetX = 70 - (drawWidth - 380) / 2;
-          offsetY = 200;
+          offsetX = 82 - (drawWidth - 340) / 2;
+          offsetY = 180;
         } else {
-          drawWidth = 380;
+          drawWidth = 340;
           drawHeight = drawWidth / aspectRatio;
-          offsetX = 70;
-          offsetY = 200 - (drawHeight - 520) / 2;
+          offsetX = 82;
+          offsetY = 180 - (drawHeight - 320) / 2;
         }
         
         ctx.drawImage(userPhoto, offsetX, offsetY, drawWidth, drawHeight);
         ctx.restore();
 
-        dibujarRestoDeLicencia(ctx, azulOscuro, azulClaro);
+        // Continuar con el resto de la licencia
+        continuarDibujandoLicencia(ctx, azulOscuro, azulMedio, grisClaro);
       };
       
       userPhoto.onerror = function() {
-        ctx.fillStyle = '#c0dce8';
-        ctx.fillRect(70, 200, 380, 520);
-        ctx.fillStyle = '#7ba5b8';
-        ctx.font = '32px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('☁️', 260, 440);
-        ctx.font = '24px Arial';
-        ctx.fillText('Sin foto', 260, 490);
+        console.error("Error al cargar la foto");
         
-        dibujarRestoDeLicencia(ctx, azulOscuro, azulClaro);
+        // Si falla, dibujar placeholder
+        ctx.fillStyle = '#a0c0d0';
+        ctx.fillRect(82, 180, 340, 320);
+        ctx.fillStyle = '#7ba5b8';
+        ctx.font = '48px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('☁️', 252, 320);
+        ctx.font = '24px Arial';
+        ctx.fillText('Sin foto', 252, 360);
+        
+        continuarDibujandoLicencia(ctx, azulOscuro, azulMedio, grisClaro);
       };
       
       userPhoto.src = licenciaActual.foto;
     }
 
-    function dibujarRestoDeLicencia(ctx, azulOscuro, azulClaro) {
-      ctx.fillStyle = '#f5f5f5';
-      ctx.fillRect(520, 180, 700, 560);
+    function continuarDibujandoLicencia(ctx, azulOscuro, azulMedio, grisClaro) {
+      console.log("Dibujando resto de la licencia...");
 
-      ctx.textAlign = 'right';
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 32px Arial';
-      ctx.fillText('Modelo / Model', 1200, 230);
-      ctx.font = '28px Arial';
-      ctx.fillText('[Tipo de Licencia]', 1200, 270);
-      ctx.font = 'bold 36px Arial';
-      ctx.fillStyle = azulClaro;
-      ctx.fillText(licenciaActual.tipoLicencia, 1200, 320);
+      // === SECCIÓN CENTRAL (Datos) ===
+      ctx.fillStyle = grisClaro;
+      ctx.fillRect(472, 180, 620, 480);
 
-      ctx.textAlign = 'left';
-      let yPos = 400;
-      const lineHeight = 90;
-
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 28px Arial';
-      ctx.fillText('N° Licencia / N° License', 570, yPos);
-      ctx.font = '24px Arial';
-      ctx.fillText('[N° Registro]', 570, yPos + 30);
-      ctx.font = 'bold 32px Arial';
-      ctx.fillStyle = azulClaro;
-      ctx.fillText(licenciaActual.numero, 570, yPos + 70);
-
-      yPos += lineHeight;
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 28px Arial';
-      ctx.fillText('Nombre / Name', 570, yPos);
-      ctx.font = '24px Arial';
-      ctx.fillText('[Nombre]', 570, yPos + 30);
-      ctx.font = 'bold 32px Arial';
-      ctx.fillStyle = azulClaro;
-      ctx.fillText(licenciaActual.nombre, 570, yPos + 70);
-
-      yPos += lineHeight;
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 28px Arial';
-      ctx.fillText('Fecha Registro / Registration date', 570, yPos);
-      ctx.font = '24px Arial';
-      ctx.fillText('[Fecha Registro]', 570, yPos + 30);
-      ctx.font = 'bold 32px Arial';
-      ctx.fillStyle = azulClaro;
-      ctx.fillText(licenciaActual.fechaRegistro, 570, yPos + 70);
-
-      yPos += lineHeight;
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 28px Arial';
-      ctx.fillText('Fecha Renovacion / Renewal Date', 570, yPos);
-      ctx.font = '24px Arial';
-      ctx.fillText('[Fecha Renovación]', 570, yPos + 30);
-      ctx.font = 'bold 32px Arial';
-      ctx.fillStyle = azulClaro;
-      ctx.fillText(licenciaActual.fechaRenovacion, 570, yPos + 70);
-
-      ctx.fillStyle = 'white';
-      ctx.fillRect(1240, 630, 150, 150);
-      ctx.strokeStyle = azulOscuro;
-      ctx.lineWidth = 3;
-      ctx.strokeRect(1240, 630, 150, 150);
-      ctx.fillStyle = azulOscuro;
-      ctx.font = '16px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText('Scan me!', 1315, 800);
-
+      // Marca de agua central
       ctx.save();
-      ctx.globalAlpha = 0.05;
-      ctx.fillStyle = azulOscuro;
-      ctx.font = 'bold 120px Arial';
+      ctx.globalAlpha = 0.08;
+      ctx.fillStyle = azulMedio;
+      ctx.font = 'bold 180px Arial';
       ctx.textAlign = 'center';
-      ctx.translate(728, 458);
-      ctx.rotate(-20 * Math.PI / 180);
-      ctx.fillText('ARGENTINA RP', 0, 0);
+      ctx.translate(782, 420);
+      ctx.rotate(-25 * Math.PI / 180);
+      ctx.fillText('ArgeRP', 0, 0);
       ctx.restore();
 
-      ctx.fillStyle = azulOscuro;
-      ctx.fillRect(0, 750, canvas.width, 66);
-      ctx.fillStyle = 'white';
-      ctx.font = 'bold 36px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText('🎮 Argentina Roleplay - Licencias', canvas.width / 2, 795);
+      // === DATOS DE LA LICENCIA ===
+      ctx.textAlign = 'left';
+      let yPos = 250;
 
+      // N° Licencia / N° License
+      ctx.fillStyle = azulOscuro;
+      ctx.font = 'bold 26px Arial';
+      ctx.fillText('N° Licencia / N° License', 520, yPos);
+      ctx.font = '20px Arial';
+      ctx.fillStyle = '#555';
+      ctx.fillText('[N° Registro]', 520, yPos + 28);
+      ctx.font = 'bold 32px Arial';
+      ctx.fillStyle = azulMedio;
+      ctx.fillText(licenciaActual.numero, 520, yPos + 65);
+
+      // Nombre / Name
+      yPos += 110;
+      ctx.fillStyle = azulOscuro;
+      ctx.font = 'bold 26px Arial';
+      ctx.fillText('Nombre / Name', 520, yPos);
+      ctx.font = '20px Arial';
+      ctx.fillStyle = '#555';
+      ctx.fillText('[Nombre]', 520, yPos + 28);
+      ctx.font = 'bold 32px Arial';
+      ctx.fillStyle = azulMedio;
+      ctx.fillText(licenciaActual.nombre, 520, yPos + 65);
+
+      // Fecha Registro / Registration date
+      yPos += 110;
+      ctx.fillStyle = azulOscuro;
+      ctx.font = 'bold 26px Arial';
+      ctx.fillText('Fecha Registro / Registration date', 520, yPos);
+      ctx.font = '20px Arial';
+      ctx.fillStyle = '#555';
+      ctx.fillText('[Fecha Registro]', 520, yPos + 28);
+      ctx.font = 'bold 32px Arial';
+      ctx.fillStyle = azulMedio;
+      ctx.fillText(licenciaActual.fechaRegistro, 520, yPos + 65);
+
+      // Fecha Renovacion / Renewal Date
+      yPos += 110;
+      ctx.fillStyle = azulOscuro;
+      ctx.font = 'bold 26px Arial';
+      ctx.fillText('Fecha Renovacion / Renewal Date', 520, yPos);
+      ctx.font = '20px Arial';
+      ctx.fillStyle = '#555';
+      ctx.fillText('[Fecha Renovación]', 520, yPos + 28);
+      ctx.font = 'bold 32px Arial';
+      ctx.fillStyle = azulMedio;
+      ctx.fillText(licenciaActual.fechaRenovacion, 520, yPos + 65);
+
+      // === SECCIÓN DERECHA (Tipo de Licencia) ===
+      ctx.textAlign = 'right';
+      ctx.fillStyle = azulOscuro;
+      ctx.font = 'bold 28px Arial';
+      ctx.fillText('Modelo / Model', 1380, 240);
+      ctx.font = '22px Arial';
+      ctx.fillStyle = '#555';
+      ctx.fillText('[Tipo de Licencia]', 1380, 275);
+      ctx.font = 'bold 38px Arial';
+      ctx.fillStyle = azulMedio;
+      ctx.fillText(licenciaActual.tipoLicencia, 1380, 320);
+
+      // QR Code (placeholder)
+      ctx.fillStyle = 'white';
+      ctx.fillRect(1260, 500, 140, 140);
+      ctx.strokeStyle = azulOscuro;
+      ctx.lineWidth = 3;
+      ctx.strokeRect(1260, 500, 140, 140);
+      
+      // Patrón QR simple
+      ctx.fillStyle = azulOscuro;
+      for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) {
+          if ((i + j) % 2 === 0) {
+            ctx.fillRect(1270 + i * 24, 510 + j * 24, 20, 20);
+          }
+        }
+      }
+      
+      ctx.textAlign = 'center';
+      ctx.fillStyle = azulOscuro;
+      ctx.font = 'bold 16px Arial';
+      ctx.fillText('Scan me!', 1330, 660);
+
+      // === FOOTER (Azul oscuro) ===
+      ctx.fillStyle = azulOscuro;
+      ctx.fillRect(0, 700, canvas.width, 116);
+
+      // Logo RP
+      ctx.beginPath();
+      ctx.arc(130, 758, 40, 0, 2 * Math.PI);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+      ctx.fillStyle = azulOscuro;
+      ctx.font = 'bold 32px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('RP', 130, 770);
+
+      // Texto footer
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 42px Arial';
+      ctx.textAlign = 'left';
+      ctx.fillText('Argentina Roleplay - Licencias', 190, 770);
+
+      // Descargar después de un breve delay
+      console.log("Licencia generada, iniciando descarga...");
       setTimeout(function() {
         descargarLicencia();
-      }, 500);
+      }, 300);
     }
 
     function descargarLicencia() {
-      const canvas = document.getElementById('licenseCanvas');
-      const link = document.createElement('a');
-      const nombreArchivo = 'Licencia_' + licenciaActual.numero + '_' + licenciaActual.nombre.replace(/\s+/g, '_') + '.png';
-      link.download = nombreArchivo;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      alert("✅ ¡Licencia generada y descargada exitosamente!");
-    }
-
-    document.getElementById("searchInput").addEventListener("input", function(e) {
-      const busqueda = e.target.value.toLowerCase().trim();
-      const cards = document.querySelectorAll("#listaLicencias > div");
-      
-      cards.forEach(function(card) {
-        const texto = card.textContent.toLowerCase();
-        if (texto.includes(busqueda)) {
-          card.style.display = "block";
-        } else {
-          card.style.display = "none";
-        }
-      });
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        if (!document.getElementById('modal').classList.contains('hidden')) {
-          cerrarModal();
-        }
-      }
-    });
-
-    cargarLicenciasDesdeStorage();
-    cargarLicencias();
-  </script>
-</body>
-</html>
+      try {
+        const canvas = document.getElementById('licenseCanvas');
+        const link = document.createElement('a');
+        const nombreArchivo = 'Licencia_
