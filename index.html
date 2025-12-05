@@ -632,4 +632,43 @@
       try {
         const canvas = document.getElementById('licenseCanvas');
         const link = document.createElement('a');
-        const nombreArchivo = 'Licencia_
+        const nombreArchivo = 'Licencia_' + licenciaActual.numero.replace(/[^a-zA-Z0-9]/g, '_') + '_' + licenciaActual.nombre.replace(/\s+/g, '_') + '.png';
+        link.download = nombreArchivo;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        
+        console.log("Descarga completada");
+        alert("✅ ¡Licencia generada y descargada exitosamente!\n\nBusca el archivo: " + nombreArchivo);
+      } catch (error) {
+        console.error("Error al descargar:", error);
+        alert("❌ Error al descargar la licencia. Por favor intenta nuevamente.");
+      }
+    }
+
+    document.getElementById("searchInput").addEventListener("input", function(e) {
+      const busqueda = e.target.value.toLowerCase().trim();
+      const cards = document.querySelectorAll("#listaLicencias > div");
+      
+      cards.forEach(function(card) {
+        const texto = card.textContent.toLowerCase();
+        if (texto.includes(busqueda)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        if (!document.getElementById('modal').classList.contains('hidden')) {
+          cerrarModal();
+        }
+      }
+    });
+
+    cargarLicenciasDesdeStorage();
+    cargarLicencias();
+  </script>
+</body>
+</html>
